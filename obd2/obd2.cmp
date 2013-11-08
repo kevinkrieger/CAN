@@ -1,0 +1,24 @@
+Cmp-Mod V01 Created by CvPcb (2013-05-18 BZR 4017)-stable date = Thu 31 Oct 2013 23:24:40 CST
+
+BeginCmp
+TimeStamp = /526DD841;
+Reference = U1;
+ValeurCmp = 389-MCP2515-I/ST;
+IdModule  = Plecharts/axxkb;
+EndCmp
+
+BeginCmp
+TimeStamp = /526DD860;
+Reference = U2;
+ValeurCmp = 385-MCP2551-I/SN;
+IdModule  = Plecharts/b6cyy;
+EndCmp
+
+BeginCmp
+TimeStamp = /526DE613;
+Reference = U3;
+ValeurCmp = 1389-LPC1343FBD48,151;
+IdModule  = melissa/dintu;
+EndCmp
+
+EndListe
