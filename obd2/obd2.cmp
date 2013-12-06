@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-05-18 BZR 4017)-stable date = Tue 26 Nov 2013 01:04:35 CST
+Cmp-Mod V01 Created by CvPcb (2013-05-18 BZR 4017)-stable date = Tue 03 Dec 2013 23:36:14 CST
 
 BeginCmp
 TimeStamp = /527C5601;
@@ -78,10 +78,38 @@ IdModule  = c_0805;
 EndCmp
 
 BeginCmp
+TimeStamp = /5296D45A;
+Reference = C12;
+ValeurCmp = 1u;
+IdModule  = c_0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /5296D7EA;
+Reference = C13;
+ValeurCmp = 1u;
+IdModule  = c_0805;
+EndCmp
+
+BeginCmp
 TimeStamp = /52894BCC;
 Reference = D1;
 ValeurCmp = 3V3_ON;
 IdModule  = LED_J_LEAD;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C21DE;
+Reference = D2;
+ValeurCmp = 1N4149;
+IdModule  = DO-35;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C2008;
+Reference = F1;
+ValeurCmp = approx 300mA;
+IdModule  = SM0603;
 EndCmp
 
 BeginCmp
@@ -106,10 +134,45 @@ IdModule  = SOLDER_JUMPER_3;
 EndCmp
 
 BeginCmp
+TimeStamp = /529C5CE4;
+Reference = JP2;
+ValeurCmp = K_LINE;
+IdModule  = SOLDER_JUMPER;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C5CFB;
+Reference = JP3;
+ValeurCmp = L_LINE;
+IdModule  = SOLDER_JUMPER;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C5D01;
+Reference = JP4;
+ValeurCmp = SCS;
+IdModule  = SOLDER_JUMPER;
+EndCmp
+
+BeginCmp
+TimeStamp = /529EBED9;
+Reference = K1;
+ValeurCmp = UART;
+IdModule  = SIL-3;
+EndCmp
+
+BeginCmp
 TimeStamp = /527C7949;
 Reference = LCD1;
 ValeurCmp = LCD16X2;
 IdModule  = GDM1602K;
+EndCmp
+
+BeginCmp
+TimeStamp = /5296C2A8;
+Reference = LCD2;
+ValeurCmp = LCD_COG;
+IdModule  = NHD_C0216CZ_NSW_BBW;
 EndCmp
 
 BeginCmp
@@ -145,6 +208,20 @@ TimeStamp = /528C462E;
 Reference = P1;
 ValeurCmp = JTAG_PROG;
 IdModule  = GRPB052VWQS-RC;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C8EA3;
+Reference = P2;
+ValeurCmp = IO_1;
+IdModule  = SIL-4;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C956C;
+Reference = P3;
+ValeurCmp = IO_2;
+IdModule  = SIL-6;
 EndCmp
 
 BeginCmp
@@ -204,6 +281,27 @@ IdModule  = R3;
 EndCmp
 
 BeginCmp
+TimeStamp = /5296DC2C;
+Reference = R9;
+ValeurCmp = R_LCD_LED;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C41F1;
+Reference = R10;
+ValeurCmp = R_CON1;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C41F7;
+Reference = R11;
+ValeurCmp = R_CON2;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
 TimeStamp = /528C4789;
 Reference = SW1;
 ValeurCmp = SW_OFF_MOM;
@@ -222,6 +320,13 @@ TimeStamp = /528C479C;
 Reference = SW3;
 ValeurCmp = SW_OFF_MOM;
 IdModule  = FSM4JSMA_pushbutton;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C14EF;
+Reference = SW4;
+ValeurCmp = PWR_SW;
+IdModule  = MMS1208;
 EndCmp
 
 BeginCmp
@@ -277,6 +382,13 @@ BeginCmp
 TimeStamp = /52927C17;
 Reference = W3;
 ValeurCmp = 3V3_T;
+IdModule  = SIL-2;
+EndCmp
+
+BeginCmp
+TimeStamp = /529C35FA;
+Reference = W4;
+ValeurCmp = 12V_T;
 IdModule  = SIL-2;
 EndCmp
 
