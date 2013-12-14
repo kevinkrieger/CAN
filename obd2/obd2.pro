@@ -1,12 +1,17 @@
-update=Mon 25 Nov 2013 23:52:45 CST
+update=Sat 07 Dec 2013 18:24:32 CST
 version=1
-last_client=cvpcb
+last_client=pcbnew
 [general]
 version=1
+[cvpcb]
+version=1
+NetIExt=net
+[cvpcb/libraries]
+EquName1=devcms
 [eeschema]
 version=1
 LibDir=/home/kevin/Dropbox/Apps/CircuitHub/parts/kicad;/home/kevin/Dropbox/kicadlibs
-NetFmtName=
+NetFmtName=PcbnewAdvanced
 RptD_X=0
 RptD_Y=100
 RptLab=1
@@ -44,14 +49,15 @@ LibName29=contrib
 LibName30=valves
 LibName31=CircuitHub
 LibName32=kevin
+LibName33=kkrieger_logo
 [pcbnew]
 version=1
 LastNetListRead=obd2.net
 UseCmpFile=1
-PadDrill=0.600000000000
-PadDrillOvalY=0.600000000000
-PadSizeH=1.500000000000
-PadSizeV=1.500000000000
+PadDrill=1.000000000000
+PadDrillOvalY=1.000000000000
+PadSizeH=1.400000000000
+PadSizeV=2.500000000000
 PcbTextSizeV=1.500000000000
 PcbTextSizeH=1.500000000000
 PcbTextThickness=0.300000000000
@@ -64,6 +70,7 @@ DrawSegmentWidth=0.200000000000
 BoardOutlineThickness=0.100000000000
 ModuleOutlineThickness=0.150000000000
 [pcbnew/libraries]
+LibDir=/home/kevin/Dropbox/Apps/CircuitHub/parts/kicad;/home/kevin/Dropbox/kicadlibs
 LibName1=sockets
 LibName2=connect
 LibName3=discret
@@ -82,9 +89,6 @@ LibName15=pga_sockets
 LibName16=valves
 LibName17=CircuitHub
 LibName18=kevin
-LibDir=/home/kevin/Dropbox/Apps/CircuitHub/parts/kicad;/home/kevin/Dropbox/kicadlibs
-[cvpcb]
-version=1
-NetIExt=net
-[cvpcb/libraries]
-EquName1=devcms
+LibName19=ohw-logo
+LibName20=oshw-logo-kicad-copper-10mm
+LibName21=kkrieger_logo

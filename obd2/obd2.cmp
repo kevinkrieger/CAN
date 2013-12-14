@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-05-18 BZR 4017)-stable date = Tue 03 Dec 2013 23:36:14 CST
+Cmp-Mod V01 Created by CvPcb (2013-05-18 BZR 4017)-stable date = Sat 07 Dec 2013 17:39:37 CST
 
 BeginCmp
 TimeStamp = /527C5601;
@@ -351,10 +351,10 @@ IdModule  = DPAK;
 EndCmp
 
 BeginCmp
-TimeStamp = /527C4C0F;
+TimeStamp = /52A3B73F;
 Reference = U4;
-ValeurCmp = 1449-LPC11C14FBD48/301,;
-IdModule  = melissa/dintu;
+ValeurCmp = LPC11C14;
+IdModule  = LQFP48;
 EndCmp
 
 BeginCmp
