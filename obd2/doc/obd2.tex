@@ -1,0 +1,98 @@
+\documentclass{article}
+% Allows control of page geometry
+% Set to 1 inch margins (mla standard I guess)
+\usepackage[margin=1in]{geometry}
+
+% Graphics package
+% Use it like:
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=90mm,angle=0]{fixed_dome1.jpg}
+% \caption{A simple caption}
+% \label{overflow}
+% \end{figure}	
+\usepackage[pdftex]{graphicx}
+
+% Allows you to include pdf documents or pages in the document
+% using \includepdf[pages=2-4]{file} or whatever 
+\usepackage{pdfpages}
+
+% Self explanatory, appendix package
+\usepackage{appendix}
+
+% The listings package is used for inserting source code with highlights
+\usepackage{listings}
+\usepackage{color}
+\lstdefinestyle{custom}{
+  belowcaptionskip=1\baselineskip,
+  language=bash,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  numberstyle=\ttfamily
+}
+\lstset{style=custom}
+
+% Hyperref package is used for hyperlinking the document (ex: toc links)
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\usepackage{float}
+\restylefloat{figure}
+
+% Title Page
+\title{CAN-obd2}
+\author{Kevin Krieger}
+\date{January 2014}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{History} \label{history}
+
+\subsection{Version 1}
+
+\section{} \label{}
+
+\section{} \label{}
+
+\section{} \label{}
+
+\section{} \label{}
+
+\section{} \label{}
+
+\section{} \label{}
+
+%{%
+%\newcommand{\mc}[3]{\multicolumn{#1}{#2}{#3}}
+%\begin{center}
+%\begin{tabular}[c]{|l|l|l|l|}\hline
+%\mc{1}{|c|}{\textbf{Column 1}} & \mc{1}{c|}{\textbf{2}} & \mc{1}{c|}{\textbf%{3}} & \mc{1}{c|}{\textbf{4}}\\\hline
+%Blah & Blah & blah 3 & \\
+%Saskatchewan & Kevin Krieger & kevin.krieger@usask.ca & no info\\
+%& & not much here &\\
+%\hline
+%\end{tabular}
+%\end{center}
+%}%
+
+%{\bf THIS TEXT WILL BE LOUD!}
+
+%\subsubsection{Subsubsection} \label{Labelsubsubsection}
+%See the  \hyperref[overview]{Overview} section.
+
+\appendix
+
+\end{document}          
