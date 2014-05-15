@@ -29,7 +29,7 @@ all: obd2.axf
 obd2.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -L"/home/kevin/lpcxpresso/lpc_chip_11cxx_lib/Debug" -L"/home/kevin/lpcxpresso/lpc_chip_11cxx_lib" -L"/home/kevin/lpcxpresso/lpc_chip_11cxx_lib/Release" -Xlinker -Map="obd2.map" -Xlinker --gc-sections -mcpu=cortex-m0 -mthumb -T "obd2_Debug.ld" -o "obd2.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -L"/home/kevin/lpcxpresso/lpc_chip_11cxx_lib/Release" -L"/home/kevin/lpcxpresso/lpc_chip_11cxx_lib" -Xlinker -Map="obd2.map" -Xlinker --gc-sections -mcpu=cortex-m0 -mthumb -T "obd2_Release.ld" -o "obd2.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

@@ -1,15 +1,31 @@
 /*
  * GENERATED FILE - DO NOT EDIT
- * (c) Code Red Technologies Ltd, 2008-${year}
- * (c) NXP Semiconductors 2013-${year}
- * Generated linker script file for 2014
- * Created from LPC11C14/301 (Mon May 05 21:42:21 CST 2014)
- * By generic_c.ld on LPCXpresso v7.1.1 [Build 125] [2014-04-01] 
- */
+ * (c) Code Red Technologies Ltd, 2008-2014
+ * (c) NXP Semiconductors 2013-2014
+ * Linker script memory definitions
+ * Created from LinkMemoryTemplate
+ * By LPCXpresso v7.1.1 [Build 125] [2014-04-01]  on Mon Apr 28 21:04:43 CST 2014)
+*/
+
+ GROUP(
+ libcr_semihost.a
+ libcr_c.a
+ libcr_eabihelpers.a
+ )
+
+MEMORY
+{
+  /* Define each memory region */
+  MFlash32 (rx) : ORIGIN = 0x0, LENGTH = 0x8000 /* 32K bytes */
+  RamLoc8 (rwx) : ORIGIN = 0x10000F00, LENGTH = 0x1F00 /* 8K bytes */
 
 
-INCLUDE "obd2_Debug_lib.ld"
-INCLUDE "obd2_Debug_mem.ld"
+}
+  /* Define a symbol for the top of each memory region */
+  __top_MFlash32 = 0x0 + 0x8000;
+  __top_RamLoc8 = 0x10000F00 + 0x1F00;
+
+
 
 ENTRY(ResetISR)
 
@@ -118,3 +134,4 @@ SECTIONS
     PROVIDE(_pvHeapStart = .);
     PROVIDE(_vStackTop = __top_RamLoc8 - 0);
 }
+

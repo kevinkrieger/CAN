@@ -23,25 +23,25 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: obd2.axf
+all: liblpc_chip_11cxx_lib.a
 
 # Tool invocations
-obd2.axf: $(OBJS) $(USER_OBJS)
+liblpc_chip_11cxx_lib.a: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -L"/home/kevin/lpcxpresso/lpc_chip_11cxx_lib/Debug" -L"/home/kevin/lpcxpresso/lpc_chip_11cxx_lib" -L"/home/kevin/lpcxpresso/lpc_chip_11cxx_lib/Release" -Xlinker -Map="obd2.map" -Xlinker --gc-sections -mcpu=cortex-m0 -mthumb -T "obd2_Debug.ld" -o "obd2.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Invoking: MCU Archiver'
+	arm-none-eabi-ar -r  "liblpc_chip_11cxx_lib.a" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) obd2.axf
+	-$(RM) $(OBJS)$(C_DEPS)$(ARCHIVES) liblpc_chip_11cxx_lib.a
 	-@echo ' '
 
 post-build:
 	-@echo 'Performing post-build steps'
-	-arm-none-eabi-size "obd2.axf"; # arm-none-eabi-objcopy -v -O binary "obd2.axf" "obd2.bin" ; # checksum -p LPC11C14_301 -d "obd2.bin";
+	-arm-none-eabi-size "liblpc_chip_11cxx_lib.a" ; # arm-none-eabi-objdump -h -S "liblpc_chip_11cxx_lib.a" >"liblpc_chip_11cxx_lib.lss"
 	-@echo ' '
 
 .PHONY: all clean dependents

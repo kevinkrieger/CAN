@@ -2,7 +2,17 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-USER_OBJS :=
+O_SRCS := 
+C_SRCS := 
+S_SRCS := 
+S_UPPER_SRCS := 
+OBJ_SRCS := 
+ASM_SRCS := 
+OBJS := 
+C_DEPS := 
+ARCHIVES := 
 
-LIBS := -llpc_chip_11cxx_lib
+# Every subdirectory with source files must be described here
+SUBDIRS := \
+src \
 

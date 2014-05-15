@@ -180,6 +180,7 @@ warning message, define ENABLE_UNTESTED_CODE.
 #define LPC_IOCON                 ((LPC_IOCON_T            *) LPC_IOCON_BASE)
 #define LPC_SYSCTL                ((LPC_SYSCTL_T           *) LPC_SYSCTL_BASE)
 #if defined(CHIP_LPC11CXX) || defined(CHIP_LPC11UXX) || defined(CHIP_LPC11EXX) || defined(CHIP_LPC11AXX) || defined(CHIP_LPC1125)
+#define LPC_CAN0				  ((LPC_CAN0_T				*) LPC_CAN0_BASE)
 #define LPC_SSP1                  ((LPC_SSP_T              *) LPC_SSP1_BASE)
 #endif
 #define LPC_USB                   ((LPC_USB_T              *) LPC_USB0_BASE)
@@ -194,6 +195,10 @@ warning message, define ENABLE_UNTESTED_CODE.
 
 #define LPC_ROM_API               (*((LPC_ROM_API_T        * *) LPC_ROM_API_BASE_LOC))
 
+typedef struct {			/*!< CANn Structure         */
+	__IO uint32_t RESERVED[5];
+	__IO uint32_t CANTEST;
+} LPC_CAN0_T;
 
 /**
  * @}
