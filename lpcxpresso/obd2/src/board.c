@@ -304,6 +304,7 @@ static void Board_CAN_Init() {
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 3, 3);
 	Chip_GPIO_SetPinOutLow(LPC_GPIO, 3, 3);
 }
+
 /* Get temperature in millicelcius */
 int32_t Board_Get_Temperature(void) {
 	/* Start A/D conversion */
@@ -396,10 +397,19 @@ void PIOINT2_IRQHandler(void)
 	if(LPC_GPIO[2].MIS & (1<<9)) {
 		Chip_GPIO_ClearInts(LPC_GPIO, 2, (1<<9));
 		Board_LED_Toggle(3);
+		/* Send a message on CAN bus to query 7DF (see http://en.wikipedia.org/wiki/OBD-II_PIDs#CAN_.2811-bit.29_Bus_format)
+		 * Message objects 1 and 2 should receive from 7E8 as an example, really they should have masks set to receive
+		 * from 7E8 to 7EF. this is a TODO  */
 		msg_obj.msgobj  = 0;
 		msg_obj.mode_id = 0x7df;
 		msg_obj.mask    = 0x0;
 		msg_obj.dlc     = 8;
+/* SAE standard says that the 8 bytes should look like so for a query on 7DF:
+ * 0 = 2 for number of additional data bytes
+ * 1 = mode (1 for current data and 2 for freeze frame, meaning the last saved state when 'check engine' was lit up)
+ * 2 = PID code (0x0c should be engine rpm (again see http://en.wikipedia.org/wiki/OBD-II_PIDs#Mode_01 ) which returns
+ * two bytes that are interpreted as : rpm = ((A*256)+B)/4
+ */
 		msg_obj.data[0] = 0x02;
 		msg_obj.data[1] = 0x01;
 		msg_obj.data[2] = 0x0c;
@@ -426,7 +436,8 @@ void PIOINT2_IRQHandler(void)
 		}
 		else Board_LCD_WriteString("Removed");
 	}
-	//__delay_ms(75);
+
+	/* clear and disable IRQ for the buttons, it is enabled in the systick interrupt routine every second */
 	NVIC_ClearPendingIRQ(EINT2_IRQn);
 	NVIC_DisableIRQ(EINT2_IRQn);
 }

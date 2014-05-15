@@ -142,12 +142,13 @@ int main(void) {
 	//LPC_CCAN_API->can_transmit(&msg_obj);
 
 
-	/* Configure message object 1 to receive all 11-bit messages 0x400-0x4FF */
+	/* Configure message object 1 to receive all extended 7E8 messages  */
 	msg_obj.msgobj = 1;
 	msg_obj.mode_id = 0x7E8UL | CAN_MSGOBJ_EXT;
 	msg_obj.mask = 0x0;
 	LPC_CCAN_API->config_rxmsgobj(&msg_obj);
 
+	/* Configure message object 2 to receive all 11 bit 7E8 messages  */
 	msg_obj.msgobj = 2;
 	msg_obj.mode_id = 0x7E8;
 	msg_obj.mask = 0x0;

@@ -68,6 +68,7 @@ void baudrateCalculate(uint32_t baud_rate, uint32_t *can_api_timing_cfg)
 					can_api_timing_cfg[0] = div;
 					can_api_timing_cfg[1] =
 						((quanta - 1) & 0x3F) | (can_sjw & 0x03) << 6 | (seg1 & 0x0F) << 8 | (seg2 & 0x07) << 12;
+					Board_LCD_cmd(0x80);
 					Board_LCD_WriteString("CAN baud calc'd");
 					return;
 				}
