@@ -53,7 +53,7 @@ typedef struct {
 /* Pin muxing table, only items that need changing from their default pin
    state are in this table. */
 STATIC const PINMUX_GRP_T pinmuxing[] = {
-	//{(uint32_t) IOCON_PIO0_1,  (IOCON_FUNC1 | IOCON_MODE_INACT)},	/* PIO0_1 used for CLKOUT ** ACTUALLY USED FOR GPIO/K_LINE on CAN-obd2 v1 ** */
+	{(uint32_t) IOCON_PIO0_1,  (IOCON_FUNC1 | IOCON_MODE_PULLDOWN)},	/* PIO0_1 used for CLKOUT ** ACTUALLY USED FOR GPIO/K_LINE on CAN-obd2 v1 ** HOT FIX USED FOR CAN STBY PIN on v1 ** */
 	{(uint32_t) IOCON_PIO0_2,  (IOCON_FUNC1 | IOCON_MODE_INACT)},	/* PIO0_2 used for SSEL */
 //	{(uint32_t) IOCON_PIO0_4,  (IOCON_FUNC1 | IOCON_SFI2C_EN)},	/* PIO0_4 used for SCL ** ACTUALLY USED FOR GPIO on CAN-obd2 v1 ** */
 //	{(uint32_t) IOCON_PIO0_5,  (IOCON_FUNC1 | IOCON_SFI2C_EN)},	/* PIO0_5 used for SDA ** ACTUALLY USED FOR GPIO on CAN-obd2 v1 ** */
@@ -75,7 +75,8 @@ STATIC const PINMUX_GRP_T pinmuxing[] = {
 	{(uint32_t) IOCON_PIO2_10, (IOCON_FUNC0 | IOCON_MODE_PULLUP)}, /* Card detect. Pulled up by internal and pulled low by card inserted */
 	{(uint32_t) IOCON_PIO2_11, (IOCON_FUNC1 | IOCON_MODE_INACT)},	/* PIO2_11 used for SCK */
 	{(uint32_t) IOCON_PIO1_11, (IOCON_FUNC1 | IOCON_ADMODE_EN)}, /* PIO1_11 used for the LM335 temperature sensor on CAN-obd2 v1*/
-	{(uint32_t) IOCON_PIO3_3,  (IOCON_FUNC1 | IOCON_MODE_PULLDOWN)} /* CAN stby mode active high */
+//	{(uint32_t) IOCON_PIO3_3,  (IOCON_FUNC1 | IOCON_MODE_PULLDOWN)} /* CAN stby mode active high ***ACTUALLY CONNECTED WRONG on v1
+//	IT IS CONNECTED TO SPLIT PIN ON v1*** See PIO0_1 for CAN STBY fix */
 	/* TODO: Add other pins here */
 };
 

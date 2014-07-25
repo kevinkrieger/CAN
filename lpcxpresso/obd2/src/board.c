@@ -36,6 +36,7 @@
 #include "rtc.h"
 #include "ccan_rom.h"
 #include <string.h>
+#include "cmds.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -111,12 +112,14 @@ void Board_Debug_Init(void)
 	Chip_IOCON_PinMuxSet(LPC_IOCON, IOCON_PIO1_6, (IOCON_FUNC1 | IOCON_MODE_INACT)); /* RXD ** VERIFIED CORRECT on CAN-obd2 v1** */
 	Chip_IOCON_PinMuxSet(LPC_IOCON, IOCON_PIO1_7, (IOCON_FUNC1 | IOCON_MODE_INACT)); /* TXD ** VERIFIED CORRECT on CAN-obd2 v1** */
 
-	/* Setup UART for 115.2K8N1 */
+	/* Setup UART for 115.2K8N1 and receive RBR interrupt */
 	Chip_UART_Init(LPC_USART);
-	Chip_UART_SetBaud(LPC_USART, 115200);
-	Chip_UART_ConfigData(LPC_USART, (UART_LCR_WLEN8 | UART_LCR_SBS_1BIT));
-	Chip_UART_SetupFIFOS(LPC_USART, (UART_FCR_FIFO_EN | UART_FCR_TRG_LEV2));
+	Chip_UART_SetBaud(LPC_USART, 9600);
+	Chip_UART_ConfigData(LPC_USART, (UART_LCR_WLEN8 | UART_LCR_SBS_1BIT | UART_LCR_PARITY_DIS));
+	Chip_UART_SetupFIFOS(LPC_USART, (UART_FCR_FIFO_EN | UART_FCR_RX_RS | UART_FCR_TX_RS | UART_FCR_TRG_LEV3));
+	Chip_UART_IntEnable(LPC_USART,(UART_IER_RBRINT | UART_IER_RLSINT));
 	Chip_UART_TXEnable(LPC_USART);
+
 #endif
 }
 
@@ -134,6 +137,7 @@ static void Board_LED_Init(void)
 {
 	/* Set the PIO0_3 as output on CAN-obd2 v1. Also available are PIO0_4 and 5, and PIO1_9 */
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 3);
+	Chip_GPIO_SetPinState(LPC_GPIO, 0, 3, 0);
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 4);/* GPIO_0_4 is OPEN DRAIN */
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 5);/* GPIO_0_5 is OPEN DRAIN */
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 1, 9);
@@ -301,8 +305,10 @@ static void Board_SD_Init(void) {
 
 static void Board_CAN_Init() {
 	/* set stdby pin low */
-	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 3, 3);
-	Chip_GPIO_SetPinOutLow(LPC_GPIO, 3, 3);
+	//Chip_GPIO_SetPinDIROutput(LPC_GPIO, 3, 3);
+	//Chip_GPIO_SetPinOutLow(LPC_GPIO, 3, 3);
+	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 1);
+	Chip_GPIO_SetPinOutLow(LPC_GPIO, 0, 1);
 }
 
 /* Get temperature in millicelcius */
@@ -374,6 +380,7 @@ void PIOINT2_IRQHandler(void)
 		Board_LED_Toggle(1);
 		Board_LCD_cmd(0x80);
 		snprintf(lcdBuffer, 16, "Temp %d\xdf\x43", Board_Get_Temperature()/1000);
+		DEBUGSTR(lcdBuffer);
 		Board_LCD_WriteString(lcdBuffer);
 	}
 	/* It was button 2 */
@@ -384,6 +391,7 @@ void PIOINT2_IRQHandler(void)
 		snprintf(lcdBuffer, 16, "Temp to LCD %d\xdf\x43", Board_Get_Temperature()/1000);
 		Board_LCD_WriteString(lcdBuffer);
 		snprintf((char *)sdbuffer, 1024, "Temp: %d\xdf\x43, uptime: %d seconds\r\n", Board_Get_Temperature()/1000, secondTicks);
+		DEBUGSTR(sdbuffer);
 		if(f_open(&File[1], "logfile.txt", FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) {
 				;
 		}else {
@@ -400,7 +408,7 @@ void PIOINT2_IRQHandler(void)
 		/* Send a message on CAN bus to query 7DF (see http://en.wikipedia.org/wiki/OBD-II_PIDs#CAN_.2811-bit.29_Bus_format)
 		 * Message objects 1 and 2 should receive from 7E8 as an example, really they should have masks set to receive
 		 * from 7E8 to 7EF. this is a TODO  */
-		msg_obj.msgobj  = 0;
+		msg_obj.msgobj  = 4;
 		msg_obj.mode_id = 0x7df;
 		msg_obj.mask    = 0x0;
 		msg_obj.dlc     = 8;
@@ -410,16 +418,19 @@ void PIOINT2_IRQHandler(void)
  * 2 = PID code (0x0c should be engine rpm (again see http://en.wikipedia.org/wiki/OBD-II_PIDs#Mode_01 ) which returns
  * two bytes that are interpreted as : rpm = ((A*256)+B)/4
  */
-		msg_obj.data[0] = 0x02;
-		msg_obj.data[1] = 0x01;
-		msg_obj.data[2] = 0x0c;
-		msg_obj.data[3] = 0x00;
-		msg_obj.data[4] = 0x00;
-		msg_obj.data[5] = 0x00;
-		msg_obj.data[6] = 0x00;
-		msg_obj.data[7] = 0x00;
+		msg_obj.data[0] = 0x02; // 2 == 2 additional data bytes
+		msg_obj.data[1] = 0x09; // 1 == freeze frame, 9 == request vehicle information
+		//msg_obj.data[2] = 0x0c; //engine rpm = (A*256 + B) / 4
+		//msg_obj.data[2] = 0x0d; //speed km/hr
+		msg_obj.data[2] = 0x02; // mode 9, 02 == VIN
+		msg_obj.data[3] = 0x55;
+		msg_obj.data[4] = 0x55;
+		msg_obj.data[5] = 0x55;
+		msg_obj.data[6] = 0x55;
+		msg_obj.data[7] = 0x55;
 
 		LPC_CCAN_API->can_transmit(&msg_obj);
+		DEBUGSTR("BUTTON1 - VIN?\r\n");
 	}
 
 	/* Card detect */
@@ -427,14 +438,17 @@ void PIOINT2_IRQHandler(void)
 		Chip_GPIO_ClearInts(LPC_GPIO,2, (1<<10));
 		Board_LCD_cmd(0xC0);
 		Board_LCD_WriteString("SD Card: ");
+		DEBUGSTR("SD Card: ");
 		/* Might need delay here for debounce */
 	//	__delay_ms(50);
 		if(!(Chip_GPIO_GetPinState(LPC_GPIO, 2, 10))) {
 			Board_LCD_WriteString("Inserted");
+			DEBUGSTR("Inserted\r\n");
 			__delay_ms(10);
 			Board_SD_Init();
 		}
 		else Board_LCD_WriteString("Removed");
+		DEBUGSTR("Removed\r\n");
 	}
 
 	/* clear and disable IRQ for the buttons, it is enabled in the systick interrupt routine every second */
@@ -472,6 +486,35 @@ void Board_Init(void)
 
 	/* Initialize SD card */
 	Board_SD_Init();
+
+
+	/* Change to AT mode if using HC-05 */
+	Chip_GPIO_SetPinState(LPC_GPIO, 0, 3, 1);
+	__delay_us(100);
+	Board_UARTPutSTR("AT+UART=115200,0,0\r\n");
+	Chip_UART_Read(LPC_USART, &sdbuffer , 32);
+	//while()
+	Board_LCD_cmd(0xC0);
+	Board_LCD_WriteString(sdbuffer);
+	Board_UARTPutSTR("AT+UART?\r\n");
+	Chip_UART_Read(LPC_USART, &sdbuffer, 32);
+	Board_LCD_cmd(0xC0);
+	Board_LCD_WriteString(sdbuffer);
+	Chip_GPIO_SetPinState(LPC_GPIO, 0, 3, 0);
+	__delay_us(100);
+	//Chip_UART_Init(LPC_USART);
+	Chip_UART_SetBaud(LPC_USART, 115200);
+//	Chip_UART_ConfigData(LPC_USART, (UART_LCR_WLEN8 | UART_LCR_SBS_1BIT));
+	//	Chip_UART_SetupFIFOS(LPC_USART, (UART_FCR_FIFO_EN | UART_FCR_TRG_LEV2));
+
+	//	Chip_UART_TXEnable(LPC_USART);
+
+	__delay_ms(100);
+	hdlc_init();
+
+	DEBUGSTR("TESTING");
+
+
 
 	Board_CAN_Init();
 }

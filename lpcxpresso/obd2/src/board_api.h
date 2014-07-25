@@ -34,7 +34,7 @@
 
 #include "lpc_types.h"
 #include <stdio.h>
-
+#include <string.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -161,7 +161,8 @@ typedef void (*p_msDelay_func_t)(uint32_t);
 #else
 #define DEBUGINIT() Board_Debug_Init()
 #define DEBUGOUT(...) printf(__VA_ARGS__)
-#define DEBUGSTR(str) Board_UARTPutSTR(str)
+//#define DEBUGSTR(str) Board_UARTPutSTR(str)
+#define DEBUGSTR(str) hdlc_frame_send(hdlc_frame_generator(0x00,strlen(str),str))
 #define DEBUGIN() Board_UARTGetChar()
 #endif /* defined(DEBUG_SEMIHOSTING) */
 

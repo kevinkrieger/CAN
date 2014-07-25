@@ -16,10 +16,17 @@
 #include <string.h>
 #include "systick.h"
 #include "ccan_rom.h"
+#include "ring_buffer.h"
+#include "cmds.h"
 
 #define TICKRATE_HZ1 10
 int i = 0;
+int j = 0;
 int read_character = EOF;
+uint8_t rb_itemSize = 1;
+#define RB_LEN	256
+uint8_t rb_data[RB_LEN];
+static RINGBUFF_T ringbuffer;
 
 /**
  * @brief	Handle interrupt from 32-bit timer
@@ -27,6 +34,7 @@ int read_character = EOF;
  */
 void TIMER32_0_IRQHandler(void)
 {
+
 	if (Chip_TIMER_MatchPending(LPC_TIMER32_0, 1)) {
 		i++;
 		Chip_TIMER_ClearMatch(LPC_TIMER32_0, 1);
@@ -38,18 +46,75 @@ void TIMER32_0_IRQHandler(void)
 		}
 	}
 	if(i % 20 == 0) {
-		Board_UARTPutChar('t');
-		DEBUGSTR(" Test 0123456789.`~!@#$%^&*()-=_+[]{}\\|;:/?.>,<");
-		read_character = DEBUGIN();
-		while(read_character != EOF) {
-			Board_UARTPutChar(read_character);
-			read_character = DEBUGIN();
-		}
+		j=j+1;
+		//Board_UARTPutChar('t');
+		//DEBUGSTR(" Test 0123456789.`~!@#$%^&*()-=_+[]{}\\|;:/?.>,<");
+		//read_character = DEBUGIN();
+		//while(read_character != EOF) {
+		//	Board_UARTPutChar(read_character);
+		//	read_character = DEBUGIN();
+		//}
+	//	while(RingBuffer_Pop(&ringbuffer, &read_character)) {
+	//		Board_UARTPutChar(read_character);
+		//}
+		//read_character = DEBUGIN();
+		//while(read_character != EOF) {
+	//		Board_UARTPutChar(read_character);
+		//	read_character = DEBUGIN();
+	//	}
+	//	DEBUGSTR("Temperature value: %d\r\n", Board_Get_Temperature());
+		/* Send a message on CAN bus to query 7DF (see http://en.wikipedia.org/wiki/OBD-II_PIDs#CAN_.2811-bit.29_Bus_format)
+			 * Message objects 1 and 2 should receive from 7E8 as an example, really they should have masks set to receive
+			 * from 7E8 to 7EF. this is a TODO  */
+			msg_obj.msgobj  = 3;
+			msg_obj.mode_id = 0x7df | CAN_MSGOBJ_EXT;
+			msg_obj.mask    = 0x0;
+			msg_obj.dlc     = 8;
+	/* SAE standard says that the 8 bytes should look like so for a query on 7DF:
+	 * 0 = 2 for number of additional data bytes
+	 * 1 = mode (1 for current data and 2 for freeze frame, meaning the last saved state when 'check engine' was lit up)
+	 * 2 = PID code (0x0c should be engine rpm (again see http://en.wikipedia.org/wiki/OBD-II_PIDs#Mode_01 ) which returns
+	 * two bytes that are interpreted as : rpm = ((A*256)+B)/4
+	 */
+			msg_obj.data[0] = 0x02; // 2 == 2 additional data bytes
+			msg_obj.data[1] = 0x01; // 1 == current frame
+			//msg_obj.data[2] = 0x0c; //engine rpm = (A*256 + B) / 4
+			//msg_obj.data[2] = 0x0d; //speed km/hr
+		//	msg_obj.data[2] = j%31; //increment
+			msg_obj.data[2] = 0; //which pids are supported? 0x00 to 0x20?
+			msg_obj.data[3] = 0x55;
+			msg_obj.data[4] = 0x55;
+			msg_obj.data[5] = 0x55;
+			msg_obj.data[6] = 0x55;
+			msg_obj.data[7] = 0x55;
 
-		printf("Temperature value: %d\r\n", Board_Get_Temperature());
+			LPC_CCAN_API->can_transmit(&msg_obj);
 	}
 }
 
+void UART_IRQHandler (void){
+	//DEBUGSTR("Yep\r\n");
+	if(LPC_USART->IIR & UART_IIR_INTID_RDA) {
+		DEBUGSTR("RDA\r\n\x00");
+		/* New data will be ignored if data not popped in time */
+		while (Chip_UART_ReadLineStatus(LPC_USART) & UART_LSR_RDR) {
+			uint8_t ch = Chip_UART_ReadByte(LPC_USART);
+			RingBuffer_Insert(&ringbuffer, &ch);
+			DEBUGSTR("inserted char into ringbuffer\r\n\x00");
+			//Chip_UART_SendByte(LPC_USART, ch);
+			//DEBUGSTR("\r\n"\x00);
+		}
+		hdlc_frame_parser(&ringbuffer);
+	} else if(LPC_USART->IIR & UART_IIR_INTID_RLS) {
+	//	DEBUGSTR("Yep");
+		DEBUGSTR("RLS\r\n");
+		Chip_UART_RXIntHandlerRB(LPC_USART, &ringbuffer);
+	}
+	else {
+		DEBUGSTR("UNKNOWN\r\n");
+		//DEBUGSTR("Unknown\r\n");
+	}
+}
 
 
 int main(void) {
@@ -66,6 +131,8 @@ int main(void) {
 #endif
 
     uint32_t timerFreq;
+    /* Initialize ring buffer */
+    RingBuffer_Init(&ringbuffer, rb_data, rb_itemSize, RB_LEN);
 
 	/* Enable timer 1 clock */
 	Chip_TIMER_Init(LPC_TIMER32_0);
@@ -108,6 +175,7 @@ int main(void) {
 	LPC_CCAN_API->config_calb(&callbacks);
 	/* Enable the CAN Interrupt */
 	NVIC_EnableIRQ(CAN_IRQn);
+	NVIC_EnableIRQ(UART0_IRQn);
 //LPC_CAN0->CANTEST |= 0b10000;
 
 	/* Send a simple one time CAN message */
@@ -142,17 +210,19 @@ int main(void) {
 	//LPC_CCAN_API->can_transmit(&msg_obj);
 
 
-	/* Configure message object 1 to receive all extended 7E8 messages  */
+	/* Configure message object 1 to receive all extended  messages  */
 	msg_obj.msgobj = 1;
 	msg_obj.mode_id = 0x7E8UL | CAN_MSGOBJ_EXT;
-	msg_obj.mask = 0x0;
+	msg_obj.mask = 0x0UL;
 	LPC_CCAN_API->config_rxmsgobj(&msg_obj);
 
-	/* Configure message object 2 to receive all 11 bit 7E8 messages  */
+	/* Configure message object 2 to receive all 11 bit 7E0-7EF messages  */
 	msg_obj.msgobj = 2;
-	msg_obj.mode_id = 0x7E8;
-	msg_obj.mask = 0x0;
+	msg_obj.mode_id = 0x7E0;
+	//msg_obj.mask = 0x7F0;
+	msg_obj.mask = 0x0;//receive everything!
 	LPC_CCAN_API->config_rxmsgobj(&msg_obj);
+
 
 	//Board_LCD_WriteString("Testing!");
 	//Board_LCD_cmd(0xC0); // Go to start of second line

@@ -17,7 +17,8 @@
  * Public types/enumerations/variables
  ****************************************************************************/
 
-#define TEST_CCAN_BAUD_RATE 250000
+#define TEST_CCAN_BAUD_RATE 1000000
+//#define TEST_CCAN_BAUD_RATE 200000 //David's VW
 
 CCAN_MSG_OBJ_T msg_obj;
 

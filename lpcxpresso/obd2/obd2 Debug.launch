@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="com.crt.dsfdebug.crtmcu.launchType">
 <stringAttribute key=".gdbinit" value=""/>
+<stringAttribute key="InstructionTraceInfo" value="eJx9ktFOgzAUhu99iqb3czCgYjJcHIzERCaRbl5XOCLataYt6uNbtiwORnZ32nz/d5rTM1/87jj6BqUbKSLsXjsYgShl1Yg6whuaTkK8uLuag9mBeU3AsIZre6ZM1WBSYKZVoFHGPqTaHi3WkTWif3EIWOW62OT50zNdJdh6VjRbMg3ovqqsR0d44mKU2xKE6XJTyyQvdMAEHgkJCV1ywr4xrmHPP1x0/nMrujz3EscJbsa92ZD3vCDwfW/mjON2Xj9m0GFGQt9zPTIeoYqVkLZCAO+/KrglfniaMao9i8RSQdHU7yaWuy8pQIBBXftRU6wfZfkZ4XXL+aHuviMuaIq2jLdwHP70coM90duF7qa/LX8a88F0AAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
 <stringAttribute key="LAUNCH_ID.OFSemuDetails" value="LPC-Link v1.1"/>
 <booleanAttribute key="com.crt.ctrlcenter.crtInit" value="true"/>
 <booleanAttribute key="com.crt.ctrlcenter.mainBreakIsHardware" value="false"/>

@@ -7,4 +7,7 @@
 *.d
 *.axf
 reference/
+lpcxpresso/.metadata
+lpcxpresso/obd2/core
+*.mk
 
