@@ -1,7 +1,10 @@
 *jpg
+*.JPG
 *avi
 *~
 *.o
 *.a
 *.d
 *.axf
+reference/
+
