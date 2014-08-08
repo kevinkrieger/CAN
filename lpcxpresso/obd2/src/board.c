@@ -379,7 +379,7 @@ void PIOINT2_IRQHandler(void)
 		Chip_GPIO_ClearInts(LPC_GPIO, 2, (1<<4));
 		Board_LED_Toggle(1);
 		Board_LCD_cmd(0x80);
-		snprintf(lcdBuffer, 16, "Temp %d\xdf\x43", Board_Get_Temperature()/1000);
+		snprintf(lcdBuffer, 16, "Temp %d\xdf\x43\x00", Board_Get_Temperature()/1000);
 		DEBUGSTR(lcdBuffer);
 		Board_LCD_WriteString(lcdBuffer);
 	}
@@ -390,7 +390,7 @@ void PIOINT2_IRQHandler(void)
 		Board_LCD_cmd(0x80);
 		snprintf(lcdBuffer, 16, "Temp to LCD %d\xdf\x43", Board_Get_Temperature()/1000);
 		Board_LCD_WriteString(lcdBuffer);
-		snprintf((char *)sdbuffer, 1024, "Temp: %d\xdf\x43, uptime: %d seconds\r\n", Board_Get_Temperature()/1000, secondTicks);
+		snprintf((char *)sdbuffer, 1024, "Temp: %d\xdf\x43, uptime: %d seconds\r\n\x00", Board_Get_Temperature()/1000, secondTicks);
 		DEBUGSTR(sdbuffer);
 		if(f_open(&File[1], "logfile.txt", FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) {
 				;
@@ -430,7 +430,7 @@ void PIOINT2_IRQHandler(void)
 		msg_obj.data[7] = 0x55;
 
 		LPC_CCAN_API->can_transmit(&msg_obj);
-		DEBUGSTR("BUTTON1 - VIN?\r\n");
+		DEBUGSTR("BUTTON1 - VIN?\r\n\x00");
 	}
 
 	/* Card detect */
@@ -438,17 +438,17 @@ void PIOINT2_IRQHandler(void)
 		Chip_GPIO_ClearInts(LPC_GPIO,2, (1<<10));
 		Board_LCD_cmd(0xC0);
 		Board_LCD_WriteString("SD Card: ");
-		DEBUGSTR("SD Card: ");
+		DEBUGSTR("SD Card: \x00");
 		/* Might need delay here for debounce */
 	//	__delay_ms(50);
 		if(!(Chip_GPIO_GetPinState(LPC_GPIO, 2, 10))) {
 			Board_LCD_WriteString("Inserted");
-			DEBUGSTR("Inserted\r\n");
+			DEBUGSTR("Inserted\r\n\x00");
 			__delay_ms(10);
 			Board_SD_Init();
 		}
 		else Board_LCD_WriteString("Removed");
-		DEBUGSTR("Removed\r\n");
+		DEBUGSTR("Removed\r\n\x00");
 	}
 
 	/* clear and disable IRQ for the buttons, it is enabled in the systick interrupt routine every second */
@@ -512,7 +512,7 @@ void Board_Init(void)
 	__delay_ms(100);
 	hdlc_init();
 
-	DEBUGSTR("TESTING");
+	DEBUGSTR("TESTING\x00");
 
 
 
