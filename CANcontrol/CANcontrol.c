@@ -5,8 +5,9 @@
 #include "cmds.h"
 #include "crc.h"
 #include <fcntl.h>
-
+#include <stdgui.h>
 #define BTSERIAL "/dev/rfcomm0"
+
 
 char buffer[256];
 int numread;
@@ -19,6 +20,16 @@ RINGBUFF_T* ringbuffer;
 uint8_t rb_itemSize = 1;
 #define RB_LEN	256
 uint8_t rb_data[RB_LEN];
+
+CALLBACK(draw_hello,evt,param) {
+	int ascent, descent;
+	FONT fnt;
+	fnt = get_appfont();
+	get_font_info(fnt, &ascent, &descent, NULL);
+	plot_str(evt->graphic, 5, 5+ascent+descent, "Hello World",fnt);
+
+	return 0;
+}
 
 uint8_t inputAvailable()  
 {
@@ -173,6 +184,12 @@ void sendCommand() {
 
 void main(int argc, int* argv) {
 	int i;
+	int rv;
+
+	start_gui("hellO",args,arg,0,DEF_CB,"draw_hello",draw_hello,DONE);
+	create_window("Hello",0,0,200,100,0,SET_PROP,"ON_REDRAW",1,"draw_hello",DONE);
+	run_event_loop(&rv);
+
 	printf("Opening %s... ",BTSERIAL);
 	//can_board = fopen(BTSERIAL,"r+");
 	can_board = open(BTSERIAL,O_RDWR|O_NONBLOCK);
@@ -181,6 +198,7 @@ void main(int argc, int* argv) {
 	RingBuffer_Init(ringbuffer, rb_data, rb_itemSize, RB_LEN);
 	printf("Ringbuffer initialized\r\n");
 	hdlc_init();
+
 	if (can_board != 0) {
 		printf("Success\r\n");
 			printf("1 - Send command\r\n" 
@@ -214,6 +232,7 @@ void main(int argc, int* argv) {
 				for(i = 0; i< numread; i++){
 					printf(" %x",buffer[i]);
 				}
+				printf("\r\n");
 				hdlc_frame_parser(ringbuffer);
 			} else {
 				printf("Nothing read\r\n");
