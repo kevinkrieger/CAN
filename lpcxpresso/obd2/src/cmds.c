@@ -115,14 +115,14 @@ void hdlc_frame_parser(RINGBUFF_T * ringbuffer) {
 				//DEBUGSTR("STATE_CRC_RECEIVED\r\n");
 				if(getReceived(&received, ringbuffer) == STATE_IDLE) {
 					current_state = STATE_IDLE;
-				} else {
+				} else if(received == HDLC_EFLAG) {
 					hdlc_frame->eflag = received;
 					current_state = STATE_EFLAG_RECEIVED;
 				}
 				break;
-			case STATE_EFLAG_RECEIVED:
+			//case STATE_EFLAG_RECEIVED:
 				//DEBUGSTR("STATE_EFLAG_RECEIVED\r\n");
-				break;
+			//	break;
 			case STATE_TIMEOUT:
 				//DEBUGSTR("STATE_TIMEOUT\r\n");
 				break;
@@ -130,22 +130,22 @@ void hdlc_frame_parser(RINGBUFF_T * ringbuffer) {
 				//DEBUGSTR("STATE_DEFAULT\r\n");
 				break;
 		}//case
+		if(current_state == STATE_EFLAG_RECEIVED) {
+			//DEBUGSTR("Received entire frame\r\n");
+			/* successfully received entire frame. Check that the CRC is right and send to
+			 * command parser. */
+			uint16_t length = 1+1+1+hdlc_frame->len;
+			if(crcFast((uint8_t*)hdlc_frame, length) == hdlc_frame->crc) {
+				current_state = STATE_IDLE;
+				command_parser(hdlc_frame->cmd,hdlc_frame->len,hdlc_frame->payload);
+			} else {
+				/* CRC incorrect. Let the other side know */
+				//DEBUGSTR("CRC INCORRECT\r\n");
+				current_state = STATE_IDLE;
+			}
+		}
 	}//while
 //	//DEBUGSTR("End of WHILE\r\n");
-	if(current_state == STATE_EFLAG_RECEIVED) {
-		//DEBUGSTR("Received entire frame\r\n");
-		/* successfully received entire frame. Check that the CRC is right and send to
-		 * command parser. */
-		uint16_t length = 1+1+1+hdlc_frame->len;
-		if(crcFast((uint8_t*)hdlc_frame, length) == hdlc_frame->crc) {
-			current_state = STATE_IDLE;
-			command_parser(hdlc_frame->cmd,hdlc_frame->len,hdlc_frame->payload);
-		} else {
-			/* CRC incorrect. Let the other side know */
-			//DEBUGSTR("CRC INCORRECT\r\n");
-			current_state = STATE_IDLE;
-		}
-	}
 }
 
 /* Takes a command, length and payload and generates an hdlc frame, which it returns a pointer to. */
