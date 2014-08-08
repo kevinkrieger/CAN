@@ -107,11 +107,11 @@ void UART_IRQHandler (void){
 		hdlc_frame_parser(&ringbuffer);
 	} else if(LPC_USART->IIR & UART_IIR_INTID_RLS) {
 	//	DEBUGSTR("Yep");
-		DEBUGSTR("RLS\r\n");
+		DEBUGSTR("RLS\r\n\x00");
 		Chip_UART_RXIntHandlerRB(LPC_USART, &ringbuffer);
 	}
 	else {
-		DEBUGSTR("UNKNOWN\r\n");
+		DEBUGSTR("UNKNOWN\r\n\x00");
 		//DEBUGSTR("Unknown\r\n");
 	}
 }

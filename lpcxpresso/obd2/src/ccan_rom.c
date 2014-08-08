@@ -70,7 +70,7 @@ void baudrateCalculate(uint32_t baud_rate, uint32_t *can_api_timing_cfg)
 						((quanta - 1) & 0x3F) | (can_sjw & 0x03) << 6 | (seg1 & 0x0F) << 8 | (seg2 & 0x07) << 12;
 					Board_LCD_cmd(0x80);
 					Board_LCD_WriteString("CAN baud calc'd");
-					snprintf((char *)sdbuffer, 1024, "CAN baud calculated: %d\r\n",baud_rate);
+					snprintf((char *)sdbuffer, 1024, "CAN baud calculated: %d\r\n\x00",baud_rate);
 					DEBUGSTR(sdbuffer);
 					return;
 				}
@@ -96,7 +96,7 @@ void CAN_rx(uint8_t msg_obj_num) {
 		//snprintf(lcdBuffer, 16, "RPM: %d ", ((msg_obj.data[0]*256)+msg_obj.data[1])/4);
 		//snprintf(lcdBuffer, 16, "ID:%x,#:%x",msg_obj.mode_id,msg_obj.data[] )
 	//	Board_LCD_WriteString(lcdBuffer);
-		snprintf((char *)sdbuffer, 1024, "message 1: %x %x %x %x %x %x %x %x\r\n",msg_obj.data[0],msg_obj.data[1],msg_obj.data[2],msg_obj.data[3],msg_obj.data[4],msg_obj.data[5],msg_obj.data[6],msg_obj.data[7]);
+		snprintf((char *)sdbuffer, 1024, "message 1: %x %x %x %x %x %x %x %x\r\n\x00",msg_obj.data[0],msg_obj.data[1],msg_obj.data[2],msg_obj.data[3],msg_obj.data[4],msg_obj.data[5],msg_obj.data[6],msg_obj.data[7]);
 		/*f_lseek(&File[1], f_size(&File[1]));
 		f_write(&File[1], &sdbuffer, strlen((const char *)sdbuffer), &s1);
 		f_sync(&File[1]);*/
@@ -126,7 +126,7 @@ void CAN_rx(uint8_t msg_obj_num) {
 		//snprintf(lcdBuffer, 16, "RPM: %d ", ((msg_obj.data[0]*256)+msg_obj.data[1])/4);
 		//snprintf(lcdBuffer, 16, "ID:%x,#:%x",msg_obj.mode_id,msg_obj.data[] )
 	//	Board_LCD_WriteString(lcdBuffer);
-		snprintf((char *)sdbuffer, 1024, "message 2, ID: %x: %x %x %x %x %x %x %x %x\r\n",msg_obj.mode_id,msg_obj.data[0],msg_obj.data[1],msg_obj.data[2],msg_obj.data[3],msg_obj.data[4],msg_obj.data[5],msg_obj.data[6],msg_obj.data[7]);
+		snprintf((char *)sdbuffer, 1024, "message 2, ID: %x: %x %x %x %x %x %x %x %x\r\n\x00",msg_obj.mode_id,msg_obj.data[0],msg_obj.data[1],msg_obj.data[2],msg_obj.data[3],msg_obj.data[4],msg_obj.data[5],msg_obj.data[6],msg_obj.data[7]);
 		DEBUGSTR(sdbuffer);
 		if(f_open(&File[1], "logfile.txt", FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) {
 				;
@@ -139,7 +139,7 @@ void CAN_rx(uint8_t msg_obj_num) {
 
 	} else {
 		Board_LCD_WriteChar('?');
-		snprintf((char *)sdbuffer, 1024, "message ?: %x %x %x %x %x %x %x %x\r\n",msg_obj.data[0],msg_obj.data[1],msg_obj.data[2],msg_obj.data[3],msg_obj.data[4],msg_obj.data[5],msg_obj.data[6],msg_obj.data[7]);
+		snprintf((char *)sdbuffer, 1024, "message ?: %x %x %x %x %x %x %x %x\r\n\x00",msg_obj.data[0],msg_obj.data[1],msg_obj.data[2],msg_obj.data[3],msg_obj.data[4],msg_obj.data[5],msg_obj.data[6],msg_obj.data[7]);
 		DEBUGSTR(sdbuffer);
 		if(f_open(&File[1], "logfile.txt", FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) {
 						;
@@ -158,7 +158,7 @@ void CAN_rx(uint8_t msg_obj_num) {
 void CAN_tx(uint8_t msg_obj_num) {
 	//Board_LCD_cmd(0x80);
 	//Board_LCD_WriteString("CAN TX!");
-	snprintf(lcdBuffer, 16, "CAN TX: %x", msg_obj_num);
+	snprintf(lcdBuffer, 16, "CAN TX: %x\x00", msg_obj_num);
 	DEBUGSTR(lcdBuffer);
 }
 
@@ -167,7 +167,7 @@ void CAN_tx(uint8_t msg_obj_num) {
     an error has occured on the CAN bus */
 void CAN_error(uint32_t error_info) {
 	Board_LCD_cmd(0xc0);
-	snprintf(lcdBuffer, 16, "CAN ERR: %0.2X", error_info & 0xFF);
+	snprintf(lcdBuffer, 16, "CAN ERR: %0.2X\x00", error_info & 0xFF);
 	DEBUGSTR(lcdBuffer);
 	Board_LCD_WriteString(lcdBuffer);
 
