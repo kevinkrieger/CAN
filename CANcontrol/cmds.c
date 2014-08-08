@@ -2,11 +2,19 @@
 #include <stdio.h>
 #include "ring_buffer.h"
 #include "crc.h"
+#include "timer.h"
 
 HDLC_OBJ_T hdlc_frame_struct;
 uint16_t current_state;
 uint8_t count;
 HDLC_OBJ_T * hdlc_frame;
+
+void timeout_handler(void) {
+	/* The hdlc frame parser timed out due to too much
+	 * time between characters */
+	printf("Timeout!\r\n");
+	current_state = STATE_IDLE;
+}
 
 void hdlc_init(void) {
 	/* Initialize the state machine to idle */
@@ -34,6 +42,9 @@ void hdlc_frame_parser(RINGBUFF_T * ringbuffer) {
 				if(received == HDLC_SFLAG) {
 					hdlc_frame->sflag = received;
 					current_state = STATE_SFLAG_RECEIVED;
+					if(start_timer(2000,&timeout_handler)) {
+						printf("TIMER ERROR!\r\n");
+					}
 				} else {
 					// Error
 					printf("ERROR - RECEIVED VALUE NOT START FLAG: %x\r\n", received);
@@ -116,14 +127,15 @@ void hdlc_frame_parser(RINGBUFF_T * ringbuffer) {
 				printf("STATE_CRC_RECEIVED\r\n");
 				if(getReceived(&received, ringbuffer) == STATE_IDLE) {
 					current_state = STATE_IDLE;
-				} else {
+				} else if(received == HDLC_EFLAG) {
 					hdlc_frame->eflag = received;
 					current_state = STATE_EFLAG_RECEIVED;
+					stop_timer();
 				}
 				break;
-			case STATE_EFLAG_RECEIVED:
-				printf("STATE_EFLAG_RECEIVED\r\n");
-				break;
+			//case STATE_EFLAG_RECEIVED:
+			//	printf("STATE_EFLAG_RECEIVED\r\n");
+			//	break;
 			case STATE_TIMEOUT:
 				//printf("STATE_TIMEOUT\r\n");
 				break;
@@ -131,23 +143,23 @@ void hdlc_frame_parser(RINGBUFF_T * ringbuffer) {
 				printf("STATE_DEFAULT\r\n");
 				break;
 		}//case
+		if(current_state == STATE_EFLAG_RECEIVED) {
+			printf("Received entire frame\r\n");
+			/* successfully received entire frame. Check that the CRC is right and send to
+			 * command parser. */
+			uint16_t length = 1+1+1+hdlc_frame->len;
+			if(crcFast((uint8_t*)hdlc_frame, length) == hdlc_frame->crc) {
+				current_state = STATE_IDLE;
+				command_parser(hdlc_frame->cmd,hdlc_frame->len,hdlc_frame->payload);
+			} else {
+				/* CRC incorrect. Let the other side know */
+				printf("CRC INCORRECT: %x\r\n",hdlc_frame->crc);
+				printf("Calculated: %x\r\n",crcFast((uint8_t*)hdlc_frame, length));
+				current_state = STATE_IDLE;
+			}
+		}		
 	}//while
 //	//printf("End of WHILE\r\n");
-	if(current_state == STATE_EFLAG_RECEIVED) {
-		printf("Received entire frame\r\n");
-		/* successfully received entire frame. Check that the CRC is right and send to
-		 * command parser. */
-		uint16_t length = 1+1+1+hdlc_frame->len;
-		if(crcFast((uint8_t*)hdlc_frame, length) == hdlc_frame->crc) {
-			current_state = STATE_IDLE;
-			command_parser(hdlc_frame->cmd,hdlc_frame->len,hdlc_frame->payload);
-		} else {
-			/* CRC incorrect. Let the other side know */
-			printf("CRC INCORRECT: %x\r\n",hdlc_frame->crc);
-			printf("Calculated: %x\r\n",crcFast((uint8_t*)hdlc_frame, length));
-			current_state = STATE_IDLE;
-		}
-	}
 }
 
 /* Returns the current state after receiving appropriate character
