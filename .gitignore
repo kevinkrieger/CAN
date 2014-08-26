@@ -12,4 +12,6 @@ lpcxpresso/obd2/core
 *.mk
 *.ld
 *.map
+gerbers.zip
+gerbers/
 

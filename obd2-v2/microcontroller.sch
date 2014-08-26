@@ -1,0 +1,457 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:CircuitHub
+LIBS:kevin
+LIBS:kkrieger_logo
+LIBS:obd2-cache
+EELAYER 27 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 5 7
+Title ""
+Date "11 aug 2014"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L GND #PWR047
+U 1 1 53E6F6E1
+P 4200 2250
+F 0 "#PWR047" H 4200 2250 30  0001 C CNN
+F 1 "GND" H 4200 2180 30  0001 C CNN
+F 2 "" H 4200 2250 60  0000 C CNN
+F 3 "" H 4200 2250 60  0000 C CNN
+	1    4200 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L +3.3V #PWR048
+U 1 1 53E6F6E7
+P 10400 2150
+F 0 "#PWR048" H 10400 2110 30  0001 C CNN
+F 1 "+3.3V" H 10400 2260 30  0000 C CNN
+F 2 "" H 10400 2150 60  0000 C CNN
+F 3 "" H 10400 2150 60  0000 C CNN
+	1    10400 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L +3.3V #PWR049
+U 1 1 53E6F6ED
+P 2350 2600
+F 0 "#PWR049" H 2350 2560 30  0001 C CNN
+F 1 "+3.3V" H 2350 2710 30  0000 C CNN
+F 2 "" H 2350 2600 60  0000 C CNN
+F 3 "" H 2350 2600 60  0000 C CNN
+	1    2350 2600
+	1    0    0    -1  
+$EndComp
+Text GLabel 9300 4750 2    60   Input ~ 0
+SPI_MISO
+Text GLabel 9300 4600 2    60   Output ~ 0
+SPI_MOSI
+Text GLabel 9300 4150 2    60   Output ~ 0
+SPI_SCK
+Text GLabel 3350 4300 0    60   Input ~ 0
+CAN_RXD
+Text GLabel 3350 4450 0    60   Output ~ 0
+CAN_TXD
+$Comp
+L C C13
+U 1 1 53E6F6F8
+P 2350 2850
+F 0 "C13" H 2350 2950 40  0000 L CNN
+F 1 "0.1u" H 2356 2765 40  0000 L CNN
+F 2 "c_0805" H 2388 2700 30  0000 C CNN
+F 3 "~" H 2350 2850 60  0000 C CNN
+	1    2350 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L CRYSTAL X1
+U 1 1 53E6F704
+P 1300 2450
+F 0 "X1" H 1300 2600 60  0000 C CNN
+F 1 "20MHz" H 1300 2300 60  0000 C CNN
+F 2 "CSM-3X" H 1300 2700 60  0000 C CNN
+F 3 "~" H 1300 2450 60  0000 C CNN
+	1    1300 2450
+	0    1    1    0   
+$EndComp
+$Comp
+L C C12
+U 1 1 53E6F70A
+P 1100 2800
+F 0 "C12" H 1100 2900 40  0000 L CNN
+F 1 "39pF" H 1106 2715 40  0000 L CNN
+F 2 "c_0805" H 1138 2650 30  0000 C CNN
+F 3 "~" H 1100 2800 60  0000 C CNN
+	1    1100 2800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L C C11
+U 1 1 53E6F710
+P 1100 2100
+F 0 "C11" H 1100 2200 40  0000 L CNN
+F 1 "39pF" H 1106 2015 40  0000 L CNN
+F 2 "c_0805" H 1138 1950 30  0000 C CNN
+F 3 "~" H 1100 2100 60  0000 C CNN
+	1    1100 2100
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR050
+U 1 1 53E6F716
+P 900 2200
+F 0 "#PWR050" H 900 2200 30  0001 C CNN
+F 1 "GND" H 900 2130 30  0001 C CNN
+F 2 "" H 900 2200 60  0000 C CNN
+F 3 "" H 900 2200 60  0000 C CNN
+	1    900  2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR051
+U 1 1 53E6F71C
+P 900 2900
+F 0 "#PWR051" H 900 2900 30  0001 C CNN
+F 1 "GND" H 900 2830 30  0001 C CNN
+F 2 "" H 900 2900 60  0000 C CNN
+F 3 "" H 900 2900 60  0000 C CNN
+	1    900  2900
+	1    0    0    -1  
+$EndComp
+Text GLabel 9300 4450 2    60   Input ~ 0
+SWCLK
+Text GLabel 9300 2950 2    60   BiDi ~ 0
+SWDIO
+Text GLabel 3350 2950 0    60   Output ~ 0
+SPI_SSEL
+Text GLabel 9300 1750 2    60   Output ~ 0
+UART_TXD
+Text GLabel 9300 1900 2    60   Input ~ 0
+UART_RXD
+Text GLabel 9300 3400 2    60   Input ~ 0
+CARD_DETECT
+Text GLabel 9300 2800 2    60   Input ~ 0
+TEMP
+Text GLabel 9300 5050 2    60   Input ~ 0
+Button3
+Text GLabel 9300 4900 2    60   Input ~ 0
+Button2
+Text GLabel 9300 3850 2    60   Input ~ 0
+Button1
+Text GLabel 3350 2800 0    60   Output ~ 0
+LCD_DB4
+Text GLabel 3350 3100 0    60   Output ~ 0
+LCD_DB5
+Text GLabel 3350 3250 0    60   Output ~ 0
+LCD_DB6
+Text GLabel 3350 3400 0    60   Output ~ 0
+LCD_DB7
+Text GLabel 3300 2050 0    60   Output ~ 0
+LCD_E
+Text GLabel 3350 1750 0    60   Output ~ 0
+LCD_RW
+Text GLabel 3350 1600 0    60   Output ~ 0
+LCD_RS
+$Comp
+L CONN_4 P3
+U 1 1 53E6F79A
+P 4150 750
+F 0 "P3" V 4100 750 50  0000 C CNN
+F 1 "IO_1" V 4200 750 50  0000 C CNN
+F 2 "SIL-4" V 4300 800 60  0000 C CNN
+F 3 "" H 4150 750 60  0000 C CNN
+	1    4150 750 
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR052
+U 1 1 53E6F7A0
+P 4300 1250
+F 0 "#PWR052" H 4300 1250 30  0001 C CNN
+F 1 "GND" H 4300 1180 30  0001 C CNN
+F 2 "" H 4300 1250 60  0000 C CNN
+F 3 "" H 4300 1250 60  0000 C CNN
+	1    4300 1250
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_6 P2
+U 1 1 53E6F7AD
+P 8700 750
+F 0 "P2" V 8650 750 60  0000 C CNN
+F 1 "IO_2" V 8750 750 60  0000 C CNN
+F 2 "SIL-6" V 8900 700 60  0000 C CNN
+F 3 "" H 8700 750 60  0000 C CNN
+	1    8700 750 
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR053
+U 1 1 53E6F7B3
+P 8450 1350
+F 0 "#PWR053" H 8450 1350 30  0001 C CNN
+F 1 "GND" H 8450 1280 30  0001 C CNN
+F 2 "" H 8450 1350 60  0000 C CNN
+F 3 "" H 8450 1350 60  0000 C CNN
+	1    8450 1350
+	1    0    0    -1  
+$EndComp
+$Comp
+L +3.3V #PWR054
+U 1 1 53E6F7BB
+P 8250 950
+F 0 "#PWR054" H 8250 910 30  0001 C CNN
+F 1 "+3.3V" H 8250 1060 30  0000 C CNN
+F 2 "" H 8250 950 60  0000 C CNN
+F 3 "" H 8250 950 60  0000 C CNN
+	1    8250 950 
+	1    0    0    -1  
+$EndComp
+Text GLabel 3350 4150 0    60   Output ~ 0
+CAN_XCVR_RS
+$Comp
+L LPC11C14 U7
+U 1 1 53E6F7D6
+P 6350 3450
+F 0 "U7" H 6350 3480 60  0000 L CNN
+F 1 "LPC11C14" H 5550 1550 60  0000 L CNN
+F 2 "LQFP48" H 6350 3750 60  0001 L CNN
+F 3 "" H 6350 3850 60  0001 L CNN
+	1    6350 3450
+	1    0    0    -1  
+$EndComp
+Text Notes 5700 1350 0    60   ~ 0
+XTAL required if C_CAN baud rates above 100kbit/s used
+Text GLabel 3350 4000 0    60   Output ~ 0
+LCD_LED
+Text GLabel 9300 3550 2    60   Output ~ 0
+LCD_CONT
+Text Notes 1400 850  0    60   ~ 0
+LCD_LED and LCD_CONT are PWM outputs
+Text GLabel 9300 4300 2    60   Output ~ 0
+BT_KEY
+Text GLabel 9300 3700 2    60   Output ~ 0
+BT_RESET
+Text GLabel 9300 4000 2    60   Output ~ 0
+BT_ON
+Text GLabel 3350 5050 0    60   Output ~ 0
+L_LINE_CONTROL
+Text GLabel 3350 4600 0    60   Output ~ 0
+K_LINE_EN
+Text GLabel 3300 4900 0    60   Output ~ 0
+K_LINE_TX
+Text GLabel 3300 4750 0    60   Input ~ 0
+K_LINE_RX
+Text GLabel 3350 1900 0    60   Input ~ 0
+~RESET
+$Comp
+L GND #PWR055
+U 1 1 53E7C3C5
+P 2350 3150
+F 0 "#PWR055" H 2350 3150 30  0001 C CNN
+F 1 "GND" H 2350 3080 30  0001 C CNN
+F 2 "" H 2350 3150 60  0000 C CNN
+F 3 "" H 2350 3150 60  0000 C CNN
+	1    2350 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR056
+U 1 1 53E7CE1A
+P 10400 2700
+F 0 "#PWR056" H 10400 2700 30  0001 C CNN
+F 1 "GND" H 10400 2630 30  0001 C CNN
+F 2 "" H 10400 2700 60  0000 C CNN
+F 3 "" H 10400 2700 60  0000 C CNN
+	1    10400 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C14
+U 1 1 53E6F6FE
+P 10400 2400
+F 0 "C14" H 10400 2500 40  0000 L CNN
+F 1 "0.1u" H 10406 2315 40  0000 L CNN
+F 2 "c_0805" H 10438 2250 30  0000 C CNN
+F 3 "~" H 10400 2400 60  0000 C CNN
+	1    10400 2400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3350 4450 4450 4450
+Wire Wire Line
+	1300 2100 1300 2150
+Wire Wire Line
+	1300 2800 1300 2750
+Wire Wire Line
+	900  2900 900  2800
+Wire Wire Line
+	900  2200 900  2100
+Wire Wire Line
+	8200 4450 9300 4450
+Wire Wire Line
+	8200 4600 9300 4600
+Wire Wire Line
+	8200 4750 9300 4750
+Wire Wire Line
+	3350 4600 4450 4600
+Wire Wire Line
+	3350 5050 4450 5050
+Wire Wire Line
+	8200 3250 9300 3250
+Wire Wire Line
+	8200 3100 9300 3100
+Wire Wire Line
+	8450 1100 8450 1350
+Wire Wire Line
+	3350 1900 4450 1900
+Wire Wire Line
+	4300 1250 4300 1100
+Wire Wire Line
+	3350 1600 4450 1600
+Wire Wire Line
+	3350 1750 4450 1750
+Wire Wire Line
+	3350 2050 4450 2050
+Wire Wire Line
+	4200 2250 4200 2200
+Wire Wire Line
+	4200 2200 4450 2200
+Wire Wire Line
+	2350 2650 4450 2650
+Wire Wire Line
+	2350 3050 2350 3150
+Wire Wire Line
+	2350 2650 2350 2600
+Wire Wire Line
+	1850 2350 4450 2350
+Wire Wire Line
+	1850 2500 4450 2500
+Wire Wire Line
+	3350 2950 4450 2950
+Wire Wire Line
+	3350 4300 4450 4300
+Wire Wire Line
+	3350 4150 4450 4150
+Wire Wire Line
+	3350 4000 4450 4000
+Wire Wire Line
+	3350 3850 4450 3850
+Wire Wire Line
+	3350 3700 4450 3700
+Wire Wire Line
+	3350 3550 4450 3550
+Wire Wire Line
+	8200 1600 9300 1600
+Wire Wire Line
+	9300 1750 8200 1750
+Wire Wire Line
+	9300 1900 8200 1900
+Wire Wire Line
+	8200 2050 9300 2050
+Wire Wire Line
+	8200 2350 9300 2350
+Wire Wire Line
+	10400 2200 10400 2150
+Wire Wire Line
+	8200 2200 10400 2200
+Wire Wire Line
+	8200 2650 10400 2650
+Wire Wire Line
+	8200 2500 9300 2500
+Wire Wire Line
+	9300 2950 8200 2950
+Wire Wire Line
+	9300 3550 8200 3550
+Wire Wire Line
+	9300 3700 8200 3700
+Wire Wire Line
+	9300 3850 8200 3850
+Wire Wire Line
+	9300 4150 8200 4150
+Wire Wire Line
+	8200 5050 9300 5050
+Wire Wire Line
+	9300 2800 8200 2800
+Wire Wire Line
+	9300 4000 8200 4000
+Wire Wire Line
+	1300 2750 1850 2750
+Wire Wire Line
+	1850 2750 1850 2500
+Wire Wire Line
+	1850 2350 1850 2150
+Wire Wire Line
+	1850 2150 1300 2150
+Wire Wire Line
+	3350 2800 4450 2800
+Wire Wire Line
+	10400 2600 10400 2700
+Connection ~ 10400 2650
+Wire Wire Line
+	9300 3400 8200 3400
+Wire Wire Line
+	9300 4300 8200 4300
+Wire Wire Line
+	9300 4900 8200 4900
+Wire Wire Line
+	3300 4900 4450 4900
+Wire Wire Line
+	3300 4750 4450 4750
+Wire Wire Line
+	4450 3100 3350 3100
+Wire Wire Line
+	4450 3250 3350 3250
+Wire Wire Line
+	4450 3400 3350 3400
+Text Notes 850  3800 0    60   ~ 0
+PIO0_4 and PIO0_5 are open drain (I2C bus pins)
+Wire Notes Line
+	9050 3350 10400 3350
+Wire Notes Line
+	3900 3300 2650 3300
+Wire Wire Line
+	8250 950  8250 1250
+Wire Wire Line
+	8250 1250 8550 1250
+Wire Wire Line
+	8550 1250 8550 1100
+$EndSCHEMATC
